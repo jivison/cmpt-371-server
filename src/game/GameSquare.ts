@@ -37,7 +37,7 @@ export class GameSquare {
   }
 
   public isClaimed(): boolean {
-    return !this.claimedBy;
+    return !!this.claimedBy;
   }
 
   public claimant(): string {

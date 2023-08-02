@@ -35,15 +35,21 @@ export class GameServer {
   }
 
   public async broadcast(data: Buffer): Promise<void> {
+    console.log(
+      `Broadcasting ${data.toString()} to ${
+        Object.values(this.clients).length
+      } clients`
+    );
+
     await Promise.all(Object.values(this.clients).map((c) => c.send(data)));
   }
 
   private handleConnection(c: Socket): void {
-    const clientHandler = new Client(c, this);
+    const client = new Client(c, this);
 
-    c.on("data", clientHandler.handleData.bind(clientHandler));
-    c.on("close", clientHandler.handleClose.bind(clientHandler));
-    c.on("error", clientHandler.handleError.bind(clientHandler));
+    c.on("data", client.handleData.bind(client));
+    c.on("close", client.handleClose.bind(client));
+    c.on("error", client.handleError.bind(client));
   }
 
   private getServerAddress(): string {
